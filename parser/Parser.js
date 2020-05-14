@@ -6,7 +6,7 @@ import prototypeParserOptions from './prototypes/ParserOptions'
 import prototypeParserPreviewObject from './prototypes/ParserPreviewObject'
 
 const localFunctions = {
-  ParserBase (xmlString, aFile, getAdditionalFile) {
+  ParserBase: function (xmlString, aFile, getAdditionalFile) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.errors = {}							// Fehler. Property = "ParserObject.uId" oder "-1" für "ParserBase"
@@ -29,7 +29,7 @@ const localFunctions = {
       this.updateFamilyErrors()
     }
   },
-  ParserObject (root, parents, dom) {
+  ParserObject: function (root, parents, dom) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.errors = []							// Liste der Fehler
@@ -53,7 +53,7 @@ const localFunctions = {
     // this.checkAttributes(attributes)	// Überprüft Attribute [{'attribut': 'value'}] -> gibt Array mit Fehlern zurück
     // this.checkAttribute(attribute, value)		// Überprüft Attribut	-> gibt Fehler zurück
   },
-  ParserOptions () {
+  ParserOptions: function () {
     this.ready = false						// Ist die Option bereit?
     this.useable = false					// Kann die Option zum parsen verwendet werden? (Keine Fehler und Ready)
     this.errors = []							// Liste der Fehler
@@ -65,7 +65,7 @@ const localFunctions = {
     // this.extendObj(optionObj)			// Optionen erweitern durch Objekt
     // this.get('x.y')								// Option nach Pfad ermitteln x -> y -> ...
   },
-  ParserPreviewObject (dom) {
+  ParserPreviewObject: function (dom) {
     this.ready = false						// Ist das PreviewObject bereit?
     this.useable = false					// Kann das PreviewObject verwendet werden? (Keine Fehler und Ready)
     this.errors = []							// Liste der Fehler

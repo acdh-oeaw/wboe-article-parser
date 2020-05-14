@@ -3,7 +3,7 @@ import prototypeEditorBase from './prototypes/EditorBase'
 import prototypeEditorObject from './prototypes/EditorObject'
 
 const localFunctions = {
-  EditorBase (parserObj, xmlObj, cCall = null) {
+  EditorBase: function(parserObj, xmlObj, cCall = null) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.errors = {}							// Fehler. Property = "EditorObject.uId" oder "-1" für "EditorBase"
@@ -18,7 +18,7 @@ const localFunctions = {
     this.init()										// Immer dirket initialisieren
     this.updateFamilyErrors()
   },
-  EditorObject (root, parents, parser, xml, isRoot, ignoreChilds, dontInit, autoCreate) {
+  EditorObject: function(root, parents, parser, xml, isRoot, ignoreChilds, dontInit, autoCreate) {
     this.parserObj = parser || null		// Aktuelles Parser Objekt
     this.orgXmlObj	= xml || null	// Original Xml Objekt
     this.ready = false						// Ist das Objekt bereit?
