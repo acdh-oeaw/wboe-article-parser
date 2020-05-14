@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import stdFunctions from '@/functions/stdFunctions'
+import stdFunctions from '../../stdFunctions'
 
 const localFunctions = {
   updateData (eObj, first) {

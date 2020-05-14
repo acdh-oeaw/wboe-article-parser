@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import stdFunctions from '@/functions/stdFunctions'
+import stdFunctions from '../../stdFunctions'
 import Editor from '../Editor'
 import FxGeoSelect from './FxGeoSelect'
 import FxRefBiblSelect from './FxRefBiblSelect'

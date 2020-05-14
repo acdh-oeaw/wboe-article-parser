@@ -1,5 +1,5 @@
-import xmlFunctions from '@/functions/XmlFunctions'
-import stdFunctions from '@/functions/stdFunctions'
+import xmlFunctions from '../../XmlFunctions'
+import stdFunctions from '../../stdFunctions'
 
 const localFunctions = {
   init () {

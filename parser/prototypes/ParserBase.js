@@ -1,4 +1,4 @@
-import xmlFunctions from '@/functions/XmlFunctions'
+import xmlFunctions from '../../XmlFunctions'
 import Parser from '../Parser'
 import FxGeoSelect from './FxGeoSelect'
 
