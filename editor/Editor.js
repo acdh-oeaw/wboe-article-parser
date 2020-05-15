@@ -68,6 +68,7 @@ localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 localFunctions.EditorBase.prototype.getXML = prototypeEditorBase.getXML
 localFunctions.EditorBase.prototype.moveTo = prototypeEditorBase.moveTo
 localFunctions.EditorBase.prototype.getEditorObjById = prototypeEditorBase.getEditorObjById
+localFunctions.EditorBase.prototype.getAllEditorObjById = prototypeEditorBase.getAllEditorObjById
 localFunctions.EditorBase.prototype.checkXmlIds = prototypeEditorBase.checkXmlIds
 
 // EditorObject Prototypen
