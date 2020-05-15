@@ -3,7 +3,7 @@ import prototypeXmlBase from './prototypes/XmlBase'
 import prototypeXmlObject from './prototypes/XmlObject'
 
 const localFunctions = {
-  XmlBase: function(xmlString, cCall = null) {
+  XmlBase: function (xmlString, cCall = null) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.errors = {}							// Fehler. Property = "XmlObject.uId" oder "-1" für "XmlBase"
@@ -18,7 +18,7 @@ const localFunctions = {
       this.updateFamilyErrors()
     }
   },
-  XmlObject: function(root, parents, dom, cCall = null) {
+  XmlObject: function (root, parents, dom, cCall = null) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.parserIgnore = true			// Objekt beim parsen ignorieren! (comments, usw.)
