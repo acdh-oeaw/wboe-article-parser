@@ -47,6 +47,7 @@ const localFunctions = {
     this.count = 0								// Das wievielte Elment?
     this.countParser = 0					// Das wievielte Objekt mit diesem Parser innerhalb dieser Generation ist es?
     this.multipleNr = 0						// Position in der aktuellen "multiple"-Gruppe
+    this.multipleMax = 0					// Höchste Position der Elemente in der aktuellen "multiple"-Gruppe
     this.multipleLast = true			// Letzter der aktuellen "multiple"-Gruppe
     this.addableAfter = []				// Welche Objekte können nach diesem hinzugefügt werden?
     this.addableInner = []				// Welche Objekte können nach diesem hinzugefügt werden?

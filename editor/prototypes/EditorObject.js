@@ -281,6 +281,7 @@ const localFunctions = {
     this.count = 0
     this.countParser = 0
     this.multipleNr = 0
+    this.multipleMax = 0
     this.multipleLast = false
     this.isParserCopy = ((this.parserObj) ? this.parserObj.isCopy : false)
     this.parserCopyDeep = 0
@@ -312,6 +313,17 @@ const localFunctions = {
     // Multiple Zählen
     if (this.isMultiple) {
       let aNextSibs = this.getSiblings('next', true, false, true)
+      if (aPrevSibs[0] && aPrevSibs[0].parserObj === this.parserObj) {
+        this.multipleMax = aPrevSibs[0].multipleMax
+      } else {
+        aNextSibs.some(aNSib => {
+          if (aNSib.parserObj !== this.parserObj) {
+            return true
+          }
+          this.multipleMax += 1
+          return false
+        })
+      }
       this.multipleLast = !(aNextSibs.length > 0 && aNextSibs[0].parserObj === this.parserObj)
     }
     // Spezielle Funktion
