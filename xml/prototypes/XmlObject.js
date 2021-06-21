@@ -1,6 +1,6 @@
 import Xml from '../Xml'
 import Vue from 'vue'
-import stdFunctions from '@/functions/stdFunctions'
+import stdFunctions from '../../stdFunctions'
 
 const localFunctions = {
   init () {

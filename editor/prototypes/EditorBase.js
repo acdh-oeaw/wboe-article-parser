@@ -1,5 +1,5 @@
 import Editor from '../Editor'
-import stdFunctions from '@/functions/stdFunctions'
+import stdFunctions from '../../stdFunctions'
 
 const localFunctions = {
   init () {

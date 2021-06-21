@@ -1,7 +1,7 @@
 import xmlFunctions from '../../XmlFunctions'
 import Parser from '../Parser'
 import FxGeoSelect from './FxGeoSelect'
-import stdFunctions from '@/functions/stdFunctions'
+import stdFunctions from '../../stdFunctions'
 
 const localFunctions = {
   init (xmlString, aFile) {
