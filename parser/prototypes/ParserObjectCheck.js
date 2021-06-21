@@ -8,8 +8,8 @@ const localFunctions = {
         errors.push('Kinder: Es wurden keine Kinder erwartet!')
       } else {
         aParserChilds.some(function (aPC) {		// Fehlende Tags ermitteln
-          if (!(aPC.options.get('tag.possibleTag.use'))) {
-            if (xmlObj.getChildsByName(aPC.name, true, true, aPC.options.get('oldTags')).length === 0) {
+          if (!(aPC.options.getOption('tag.possibleTag.use'))) {
+            if (xmlObj.getChildsByName(aPC.name, true, true, aPC.options.getOption('oldTags')).length === 0) {
               errors.push('Kinder: Tag "' + aPC.name + '" fehlt!')
               return true
             }
@@ -20,7 +20,7 @@ const localFunctions = {
             if (xmlO.useable && (this.getChildsByName(xmlO.name).length === 0)) {
               let sWr = true
               aParserChilds.some(function (aPC) {
-                if (Array.isArray(aPC.options.get('oldTags')) && aPC.options.get('oldTags').indexOf(xmlO.name) > -1) {
+                if (Array.isArray(aPC.options.getOption('oldTags')) && aPC.options.getOption('oldTags').indexOf(xmlO.name) > -1) {
                   sWr = false
                   return true
                 }
@@ -36,7 +36,7 @@ const localFunctions = {
     } else {
       let aParserChildsFilter = []
       aParserChilds.forEach(function (aPC) {
-        if (!(aPC.options.get('tag.possibleTag.use'))) {
+        if (!(aPC.options.getOption('tag.possibleTag.use'))) {
           aParserChildsFilter.push(aPC)
         }
       })
@@ -46,7 +46,7 @@ const localFunctions = {
     }
     if (errors.length === 0) {
       // "tagHasChildWithAttribute": { "form": { "subtype": "MWE" } }
-      let aThCwA = JSON.parse(JSON.stringify(this.options.get('tagHasChildWithAttribute')))
+      let aThCwA = JSON.parse(JSON.stringify(this.options.getOption('tagHasChildWithAttribute')))
       if (aThCwA) {
         xmlObj.childs.forEach(function (xmlO) {
           if (xmlO.useable && Object.keys(aThCwA).indexOf(xmlO.name) > -1 && Object.keys(xmlO.attributes).length > 0) {
@@ -67,7 +67,7 @@ const localFunctions = {
   },
   checkPosition (editorObj, eoDirekt = false, exp = false) {
     let errors = []
-    let aTagOption = this.options.get('tag')
+    let aTagOption = this.options.getOption('tag')
     // ToDo: Anzahl püfen! Darf nur einmal?
     // console.log(aTagOption)
     let editorPrev = ((eoDirekt) ? editorObj.getSiblings('prev', true) : editorObj.getChilds('prev', true))
@@ -76,7 +76,7 @@ const localFunctions = {
       if (parserPrev.length > 0 || editorPrev.length > 0) {		// Wenn einer von beide nicht an erster Position
         if (editorPrev.length > 0 && parserPrev.length === 0) {		// Wenn eigentlich an erster Stelle
           editorPrev.some(function (aEditor) {
-            if (!aEditor.parserObj || !aEditor.parserObj.options.get('tag.anywhere.use')) {		// Wenn nicht "anywhere" weiter kontrollieren
+            if (!aEditor.parserObj || !aEditor.parserObj.options.getOption('tag.anywhere.use')) {		// Wenn nicht "anywhere" weiter kontrollieren
               if (!aEditor.parserObj || !(aEditor.parserObj === this && aTagOption && aTagOption.multiple && aTagOption.multiple.use)) {		// Wenn kein "multiple" ...
                 errors.push('Position: Sollte an erster Stelle stehen!')
                 return true
@@ -85,7 +85,7 @@ const localFunctions = {
           }, this)
         } else if (editorPrev.length === 0 && parserPrev.length > 0) {		// Wenn an erster Stelle aber Parser nicht
           parserPrev.some(function (aParser) {
-            if (!(aParser.options.get('tag.anywhere.use') || aParser.options.get('tag.possibleTag.use'))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
+            if (!(aParser.options.getOption('tag.anywhere.use') || aParser.options.getOption('tag.possibleTag.use'))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
               errors.push('Position: Tag "' + aParser.name + '" sollte vorher stehen!')
               return true
             }
@@ -96,13 +96,13 @@ const localFunctions = {
               if (!(aTagOption && aTagOption.multiple && aTagOption.multiple.use && this === editorPrev[0].parserObj)) {		// Wenn aktuelles Tag ist nicht multiple oder parser stimmt nicht mit vorherigen überein, weiter prüfen
                 let nextParserPrev = null
                 parserPrev.some(function (aParser) {
-                  if (!(aParser.options.get('tag.anywhere.use') || aParser.options.get('tag.possibleTag.use'))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
+                  if (!(aParser.options.getOption('tag.anywhere.use') || aParser.options.getOption('tag.possibleTag.use'))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
                     nextParserPrev = aParser
                     return true
                   }
                 }, this)
                 editorPrev.some(function (aEditor) {
-                  if (!(aEditor.parserObj && (aEditor.parserObj.options.get('tag.anywhere.use') || aEditor.parserObj.options.get('tag.possibleTag.use')))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
+                  if (!(aEditor.parserObj && (aEditor.parserObj.options.getOption('tag.anywhere.use') || aEditor.parserObj.options.getOption('tag.possibleTag.use')))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
                     if (aEditor.parserObj !== nextParserPrev) {
                       if (nextParserPrev) {
                         errors.push('Position: Tag "' + nextParserPrev.name + '" sollte statt "' + ((aEditor.parserObj) ? aEditor.parserObj.name : aEditor.orgXmlObj.name) + '" vorher stehen! (vpe) ')
@@ -123,14 +123,14 @@ const localFunctions = {
       if (editorObj.countParser > 0 && !(aTagOption && aTagOption.multiple && aTagOption.multiple.use)) {
         errors.push('Anzahl: Tag sollte nur einmal vorkommen!')
       }
-      if (editorObj.isMultiple && !editorObj.multipleLast && !editorObj.parserObj.options.get('tag.anywhere.use') && editorObj.parserObj !== this) {
+      if (editorObj.isMultiple && !editorObj.multipleLast && !editorObj.parserObj.options.getOption('tag.anywhere.use') && editorObj.parserObj !== this) {
         errors.push('Position: Tag unterbricht "multiple"')
       }
       if (editorObj.parserObj !== this) {
-        if (this.options.get('tag.multiple.use') && !this.options.get('tag.anywhere.use') && editorPrev.length > 0 && editorPrev[0].parserObj === this) {
+        if (this.options.getOption('tag.multiple.use') && !this.options.getOption('tag.anywhere.use') && editorPrev.length > 0 && editorPrev[0].parserObj === this) {
           errors.push('Position: Tag wird von "multiple" umschlossen!')
         }
-        if (!this.options.get('tag.multiple.use')) {
+        if (!this.options.getOption('tag.multiple.use')) {
           let editorNext = ((eoDirekt) ? editorObj.getSiblings('next', true) : editorObj.getChilds('next', true))
           editorNext.some(function (eObj) {
             if (eObj.parserObj === this) {
@@ -148,7 +148,7 @@ const localFunctions = {
     let errors = []
     let warnings = []
     let ignoreChilds = false
-    let aValOption = this.options.get('value')
+    let aValOption = this.options.getOption('value')
     if (aValOption) {
       ignoreChilds = true
       let aVal = xmlObj.getValueByOption(aValOption, false)
@@ -193,7 +193,7 @@ const localFunctions = {
     let errors = []
     let warnings = []
     let attrObj = ((Object.keys(attrObjX).length > 0) ? attrObjX : null)
-    let aParAttrObj = this.options.get('attributes')
+    let aParAttrObj = this.options.getOption('attributes')
     aParAttrObj = ((aParAttrObj && Object.keys(aParAttrObj).length > 0) ? aParAttrObj : null)
     if (attrObj && aParAttrObj) {		// Attribute testen
       // ToDo: renameTo bei der Überprüfung beachten!
@@ -226,7 +226,7 @@ const localFunctions = {
     return {'err': errors, 'warn': warnings}
   },
   checkAttribute (attr, val) {
-    let aParAttrObj = this.options.get('attributes.' + attr)
+    let aParAttrObj = this.options.getOption('attributes.' + attr)
     if (!aParAttrObj) {
       return { 'txt': 'Attribut "' + attr + '" nicht erwartet', 'type': 'error' }
     }

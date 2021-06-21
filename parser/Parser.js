@@ -20,13 +20,14 @@ const localFunctions = {
     this.previewObj = []					// ParserPreviewObject
     this.orgString = null					// Original String für DOM
     this.orgFilename = null				// Original Dateiname
-    this.orgPath = null						// Origianl Verzeichniss
+    this.orgPath = null						// Original Verzeichniss
     this.getAdditionalFile = getAdditionalFile	// Funktion zum laden zusätzlicher Dateien.
     this.orgDOM = null						// Original DOM über init generiert
     this.additionalFiles = {}			// Zusätzliche, benötigte Dateien
+    this.type = 'unknown'					// Art des Parsers (lioe)
+    this.version = 'unknown'			// Version des Parsers
     if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
       this.init(xmlString, aFile)
-      this.updateFamilyErrors()
     }
   },
   ParserObject: function (root, parents, dom) {
@@ -44,7 +45,7 @@ const localFunctions = {
     this.root = root							// Enthält die "ParserBase"
     this.options = new localFunctions.ParserOptions()	// Aktuelle Optionen als "ParserOptions"
     this.orgDOM = dom							// Original DOM
-    this.isCopy = false						// Hanelt es sich um eine Kopie?
+    this.isCopy = false						// Handelt es sich um eine Kopie?
     this.copyOptions = []					// Optionen die im zweiten Durchlauf angewendet werden müssen.
     this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
     this.init()										// Immer dirket initialisieren
@@ -59,6 +60,7 @@ const localFunctions = {
     this.errors = []							// Liste der Fehler
     this.warnings = []						// Liste der Warnungen
     this.options = {}							// Aktuelle Optionen
+    this.$optionsCache = {}				// Cache für getOption
     this.init()										// Immer dirket initialisieren
     // this.initFromParserObject(ParserObject)	// Startwerte von "ParserObject" ermitteln
     // this.extendJSON(jsonString, errObj)		// Optionen erweitern durch JSON String
@@ -108,7 +110,7 @@ localFunctions.ParserOptions.prototype.decompressOptions = prototypeParserOption
 localFunctions.ParserOptions.prototype.extendJSON = prototypeParserOptions.extendJSON
 localFunctions.ParserOptions.prototype.extendObj = prototypeParserOptions.extendObj
 localFunctions.ParserOptions.prototype.combineObj = prototypeParserOptions.combineObj
-localFunctions.ParserOptions.prototype.get = prototypeParserOptions.get
+localFunctions.ParserOptions.prototype.getOption = prototypeParserOptions.getOption
 localFunctions.ParserOptions.prototype.getResult = prototypeParserOptions.getResult
 localFunctions.ParserOptions.prototype.extendPreviewLayout = prototypeParserOptions.extendPreviewLayout
 localFunctions.ParserOptions.prototype.getOptionValue = prototypeParserOptions.getOptionValue

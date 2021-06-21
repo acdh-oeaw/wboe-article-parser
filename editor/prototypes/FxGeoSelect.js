@@ -6,13 +6,13 @@ const localFunctions = {
     if (!eObj.fxFunction) {
       // console.log('GeoSelect - updateData new')
       eObj.fxFunction = 'GeoSelect'
-      eObj.fxData.fields = eObj.parserObj.options.get('editor.fxFunction.fields')
-      eObj.fxData.places = eObj.parserObj.root.additionalFiles[eObj.parserObj.options.get('editor.fxFunction.filename')].geoSelect
+      eObj.fxData.fields = eObj.parserObj.options.getOption('editor.fxFunction.fields')
+      eObj.fxData.places = eObj.parserObj.root.additionalFiles[eObj.parserObj.options.getOption('editor.fxFunction.filename')].geoSelect
       eObj.fxData.join = ','
       eObj.parserObj.childs.some(function (aPar) {
         if (aPar.name === 'placeName') {
           eObj.fxData.placeParser = aPar
-          eObj.fxData.join = aPar.options.get('layout.multiple.join') || ','
+          eObj.fxData.join = aPar.options.getOption('layout.multiple.join') || ','
           return true
         }
       })
@@ -92,6 +92,8 @@ const localFunctions = {
         })
       }
     }
+    eObj.fxData.selected = stdFunctions.deepSeal(eObj.fxData.selected)
+    // console.log(eObj.fxData)
   },
   checkParser (eObj) {
     let warnings = []
@@ -121,7 +123,7 @@ const localFunctions = {
         }
       }
     })
-    // ToDo: Ist Kombination von Kleinregion zu Großregion zu Bundesland korreckt?
+    // ToDo: Ist Kombination von Kleinregion zu Großregion zu Bundesland korrekt?
     return warnings
   },
 }

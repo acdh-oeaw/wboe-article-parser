@@ -1,5 +1,6 @@
 import Xml from '../Xml'
 import Vue from 'vue'
+import stdFunctions from '@/functions/stdFunctions'
 
 const localFunctions = {
   init () {
@@ -60,6 +61,7 @@ const localFunctions = {
         return false
       }
     }
+    this.orgDOM = stdFunctions.deepSeal(this.orgDOM)
     return true
   },
   addByParser (pos, pObj, autoCreate) {
@@ -73,7 +75,7 @@ const localFunctions = {
     }
     this.childs[aKey].type = ((pObj.name === '#text') ? 'TEXT' : 'ELEMENT')
     this.childs[aKey].name = pObj.name
-    let pAttr = pObj.options.get('attributes')
+    let pAttr = pObj.options.getOption('attributes')
     if (pAttr) {
       Object.keys(pAttr).forEach(function (attrKey) {
         let aAttr = pAttr[attrKey]
@@ -85,10 +87,10 @@ const localFunctions = {
         }
       }, this)
     }
-    if (autoCreate && pObj.options.get('value.autoCreateValue')) {
-      this.childs[aKey].setValue(pObj.options.getOptionValue(pObj.options.get('value.autoCreateValue'), this.orgXmlObj))
-    } else if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
-      this.childs[aKey].setValue(pObj.options.getOptionValue(pObj.options.get('value.is.value'), this.orgXmlObj))
+    if (autoCreate && pObj.options.getOption('value.autoCreateValue')) {
+      this.childs[aKey].setValue(pObj.options.getOptionValue(pObj.options.getOption('value.autoCreateValue'), this.orgXmlObj))
+    } else if (pObj.options.getOption('value.is.use') && pObj.options.getOption('value.is.value')) {
+      this.childs[aKey].setValue(pObj.options.getOptionValue(pObj.options.getOption('value.is.value'), this.orgXmlObj))
     }
     this.childs[aKey].useable = true
     this.childs[aKey].ready = true
@@ -249,7 +251,7 @@ const localFunctions = {
       }, this)
     }
     if (oEditorObj && oEditorObj.parserObj && oEditorObj.parserObj.options) {
-      if (oEditorObj.parserObj.options.get('xml.short.use')) {
+      if (oEditorObj.parserObj.options.getOption('xml.short.use')) {
         short = true
       }
     }
@@ -278,7 +280,7 @@ const localFunctions = {
             } else {
               let removeAttribute = false
               if (oEditorObj && oEditorObj.parserObj && oEditorObj.parserObj.options) {
-                let pOptAttr = oEditorObj.parserObj.options.get('attributes')
+                let pOptAttr = oEditorObj.parserObj.options.getOption('attributes')
                 if (pOptAttr && pOptAttr[aKey] && pOptAttr[aKey].removeIfEmpty && pOptAttr[aKey].removeIfEmpty.use) {
                   removeAttribute = true
                 }
@@ -292,7 +294,7 @@ const localFunctions = {
         if (!short) { aXML += '>' }
         if (this.comments.length > 0) {
           this.comments.forEach(function (aComment) {
-            aChildCont += '\n' + '  '.repeat(deep + 1) + '<?comment ' + aComment.val + '?>'
+            aChildCont += '\n' + '  '.repeat(deep + 1) + '<?comment ' + aComment.val.trim() + ' ?>'
             lChild = { 'type': 'PROCESSING_INSTRUCTION' }
           }, this)
         }

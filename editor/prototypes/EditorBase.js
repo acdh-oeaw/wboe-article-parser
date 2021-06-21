@@ -1,4 +1,5 @@
 import Editor from '../Editor'
+import stdFunctions from '@/functions/stdFunctions'
 
 const localFunctions = {
   init () {
@@ -16,6 +17,8 @@ const localFunctions = {
       return false
     }
     this.useable = true
+    this.xmlIds = stdFunctions.deepSeal(this.xmlIds)
+    console.log('EditorBase', this)
     return true
   },
   checkXmlIds () {		// Nach doppelten "xml:id" scannen.
@@ -27,7 +30,10 @@ const localFunctions = {
     }, this)
   },
   getXML () {
-    return (this.parserObj.header || '') + '\n<?redaktionstool version="' + require('../../../../../package.json').version + '"?>' + this.orgXmlObj.getXML(this)
+    return (this.parserObj.header || '')
+         + '\n<?redaktionstool version="' + require('../../../../../package.json').version + '" ?>'
+         + '\n<?parser type="' + (this.parserObj ? this.parserObj.type : 'noParser') + '" version="' + (this.parserObj ? this.parserObj.version : 'noParser') + '" ?>'
+         + this.orgXmlObj.getXML(this)
   },
   moveTo (srcUId, destUId, dir = 'left') {
     let srcObj = this.family[srcUId]
@@ -55,12 +61,12 @@ const localFunctions = {
   },
   getEditorObjById (aId) {
     return this.family.find((eObj) => {
-      return eObj && eObj.parserObj && eObj.parserObj.options && eObj.parserObj.options.get('id') === aId
+      return eObj && eObj.parserObj && eObj.parserObj.options && eObj.parserObj.options.getOption('id') === aId
     })
   },
   getAllEditorObjById (aId) {
     return this.family.filter(eObj => {
-      return eObj && eObj.parserObj && eObj.parserObj.options && eObj.parserObj.options.get('id') === aId
+      return eObj && eObj.parserObj && eObj.parserObj.options && eObj.parserObj.options.getOption('id') === aId
     })
   }
 }

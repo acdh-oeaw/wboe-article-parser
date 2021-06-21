@@ -63,7 +63,7 @@ const localFunctions = {
     }
     this.content[aKey].type = ((pObj.name === '#text') ? 'TEXT' : 'ELEMENT')
     this.content[aKey].name = pObj.name
-    let pAttr = pObj.options.get('attributes')
+    let pAttr = pObj.options.getOption('attributes')
     if (pAttr) {
       Object.keys(pAttr).forEach(function (attrKey) {
         let aAttr = pAttr[attrKey]
@@ -74,8 +74,8 @@ const localFunctions = {
         }
       }, this)
     }
-    if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
-      this.content[aKey].value = pObj.options.get('value.is.value')
+    if (pObj.options.getOption('value.is.use') && pObj.options.getOption('value.is.value')) {
+      this.content[aKey].value = pObj.options.getOption('value.is.value')
     }
     this.content[aKey].useable = true
     this.content[aKey].ready = true

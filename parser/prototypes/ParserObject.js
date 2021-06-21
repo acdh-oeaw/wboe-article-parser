@@ -48,7 +48,7 @@ const localFunctions = {
           }
         }, this)
         // Handelt es sich bei den Childs um einen "innerText"?
-        if (this.options.get('value.innerText')) {
+        if (this.options.getOption('value.innerText')) {
           let iText = ''
           if (this.orgDOM.childNodes.length > 0) {
             iText = this.orgDOM.innerHTML.replace(/<\?[^?>]*\?>/g, '').trim()
@@ -70,8 +70,8 @@ const localFunctions = {
           }
         }
       }
-      if (this.options.get('id')) {
-        let aIid = this.options.get('id')
+      if (this.options.getOption('id')) {
+        let aIid = this.options.getOption('id')
         if (!this.root.idList[aIid]) {
           this.root.idList[aIid] = this
         } else {
@@ -102,8 +102,8 @@ const localFunctions = {
         if (aTextOptions.options) {
           this.options.extendJSON(JSON.stringify(aTextOptions.options), this)
         }
-        if (this.options.get('id')) {
-          let aIid = this.options.get('id')
+        if (this.options.getOption('id')) {
+          let aIid = this.options.getOption('id')
           if (!this.root.idList[aIid]) {
             this.root.idList[aIid] = this
           } else {
@@ -161,7 +161,7 @@ const localFunctions = {
     let score = 0
     let possible = true
     let ignoreChilds = false
-    if (this.name === orgXmlObj.name || (Array.isArray(this.options.get('oldTags')) && this.options.get('oldTags').indexOf(orgXmlObj.name) > -1)) {		// Stimmt der Name überein?
+    if (this.name === orgXmlObj.name || (Array.isArray(this.options.getOption('oldTags')) && this.options.getOption('oldTags').indexOf(orgXmlObj.name) > -1)) {		// Stimmt der Name überein?
       let aErr
       score += 1
       // Attribute prüfen

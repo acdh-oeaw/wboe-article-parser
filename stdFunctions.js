@@ -58,6 +58,22 @@ const localFunctions = {
     }
     return rObj
   },
+  deepSeal (o) {
+    if (o) {
+      const self = this
+      Object.seal(o)
+      Object.preventExtensions(o)
+      if (o === undefined) {
+        return o
+      }
+      Object.getOwnPropertyNames(o).forEach(function (prop) {
+        if (o[prop] !== null && prop[0] !== '$' && (typeof o[prop] === 'object' || typeof o[prop] === 'function') && !Object.isSealed(o[prop])) {
+          self.deepSeal(o[prop])
+        }
+      })
+    }
+    return o
+  },
 }
 
 export default localFunctions

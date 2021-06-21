@@ -15,11 +15,11 @@ const localFunctions = {
     // Notwendige Überarbeitungen durchführen
     if (this.parserObj && this.orgXmlObj && this.parserObj.options) {
       // Auswahlen aktuallisieren
-      if (this.parserObj.options.get('value.is.possibleValues')) {
+      if (this.parserObj.options.getOption('value.is.possibleValues')) {
         // Aktuelle Auswahl ermitteln
         let sVal = this.orgXmlObj.getValue(false)
         let oKey = -1
-        this.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
+        this.parserObj.options.getOption('value.is.possibleValues').some(function (aVal, aKey) {
           if ((aVal.value || aVal) === sVal) {
             oKey = aKey
             return true
@@ -27,7 +27,7 @@ const localFunctions = {
         }, this)
         // Aktuell Auswahl neu setzen
         if (oKey >= 0) {
-          let aVal = this.parserObj.options.get('value.is.possibleValues')[oKey]
+          let aVal = this.parserObj.options.getOption('value.is.possibleValues')[oKey]
           this.orgXmlObj.setValue(aVal.value || aVal)
           if (aVal.attribute && Object.keys(aVal.attribute).length > 0) {
             Object.keys(aVal.attribute).forEach(function (aKey) {
@@ -37,8 +37,8 @@ const localFunctions = {
         }
       }
       // Attribute überarbeiten
-      if (this.parserObj.options.get('attributes')) {
-        let aAttr = this.parserObj.options.get('attributes') || {}
+      if (this.parserObj.options.getOption('attributes')) {
+        let aAttr = this.parserObj.options.getOption('attributes') || {}
         // "remove" überprüfen/entfernen
         Object.keys(aAttr).forEach(function (aKey) {
           if (aAttr[aKey].remove && this.orgXmlObj.attributes[aKey]) {
@@ -139,7 +139,7 @@ const localFunctions = {
     if (aParserChilds.length > 0) {
       let neededParsers = []
       aParserChilds.forEach(function (aPar) {		// Notwendige Tags ermitteln
-        if (!aPar.options.get('tag.possibleTag.use') || aPar.options.get('tag.shouldTag.use')) {
+        if (!aPar.options.getOption('tag.possibleTag.use') || aPar.options.getOption('tag.shouldTag.use')) {
           neededParsers.push(aPar)
         }
       }, this)
@@ -165,7 +165,7 @@ const localFunctions = {
       if (neededParsers.length > 0) {		// Sind noch Tags übrig?
         neededParsers.forEach(function (aVal, aKey) {
           let aPos = null
-          if (!aVal.options.get('tag.anywhere.use')) {
+          if (!aVal.options.getOption('tag.anywhere.use')) {
             let shouldBefore = aVal.getSiblings('prev', true)
             if (shouldBefore.length === 0) {
               aPos = 0
@@ -183,11 +183,11 @@ const localFunctions = {
     }
     // Daten an parserObj anpassen
     if (this.parserObj && !this.isRoot) {
-      this.isMultiple = (this.parserObj.options.get('tag.multiple.use'))		// Ist aktuelles Objekt "multiple"?
+      this.isMultiple = (this.parserObj.options.getOption('tag.multiple.use'))		// Ist aktuelles Objekt "multiple"?
       if (this.orgXmlObj) {
-        if (this.parserObj.options.get('value.is.shouldValue')) {
-          if (this.orgXmlObj.getValueByOption(this.parserObj.options.get('value'), false) !== this.parserObj.options.get('value.is.shouldValue')) {
-            this.orgXmlObj.setValue(this.parserObj.options.get('value.is.shouldValue'))
+        if (this.parserObj.options.getOption('value.is.shouldValue')) {
+          if (this.orgXmlObj.getValueByOption(this.parserObj.options.getOption('value'), false) !== this.parserObj.options.getOption('value.is.shouldValue')) {
+            this.orgXmlObj.setValue(this.parserObj.options.getOption('value.is.shouldValue'))
           }
         }
       }
@@ -288,10 +288,10 @@ const localFunctions = {
     this.refresh = true
     // ParserCopy - Tiefe
     if (this.parserObj && this.parents.length > 0) {
-      let aId = this.parserObj.options.get('id')
+      let aId = this.parserObj.options.getOption('id')
       if (aId) {
         this.parents.forEach(function (aEObj) {
-          if (aEObj.parserObj && aEObj.parserObj.options && aEObj.parserObj.options.get('id') === aId) {
+          if (aEObj.parserObj && aEObj.parserObj.options && aEObj.parserObj.options.getOption('id') === aId) {
             this.parserCopyDeep += 1
           }
         }, this)
@@ -328,9 +328,9 @@ const localFunctions = {
     }
     // Spezielle Funktion
     if (this.parserObj && this.parserObj.options) {
-      if (this.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect') {
+      if (this.parserObj.options.getOption('editor.fxFunction.name') === 'GeoSelect') {
         FxGeoSelect.updateData(this, first)
-      } else if (this.parserObj.options.get('editor.fxFunction.name') === 'RefBiblSelect') {
+      } else if (this.parserObj.options.getOption('editor.fxFunction.name') === 'RefBiblSelect') {
         FxRefBiblSelect.updateData(this, first)
       }
     }
@@ -352,13 +352,14 @@ const localFunctions = {
     // Nach diesem Tag hinzufügbare Tags
     this.addableAfter = []
     if (this.parserObj && !this.isRoot) {
-      if (this.isMultiple && this.parserObj.name !== '#text' && !this.parserObj.options.get('editor.noAddButton')) {
+      if (this.isMultiple && this.parserObj.name !== '#text' && !this.parserObj.options.getOption('editor.noAddButton')) {
         this.addableAfter.push({
           'uId': this.parserObj.uId,
           'type': 'self',
-          'title': this.parserObj.options.get('editor.addTitle') || this.parserObj.options.get('title.value') || this.parserObj.name,
+          'title': this.parserObj.options.getOption('editor.addTitle') || this.parserObj.options.getOption('title.value') || this.parserObj.name,
           'cShow': true,
-          'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.get('editor.onlyLastElementHasAddButton'))
+          'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.getOption('editor.onlyLastElementHasAddButton')),
+          'sort': this.parserObj.options.getOption('editor.addButtonSort') || 99999
         })
       }
       if (!(this.isMultiple && !this.multipleLast)) {
@@ -366,7 +367,7 @@ const localFunctions = {
         let aNextSibs = this.getSiblings('next', true)
         let aAllSibs = this.getSiblings('all', true)
         aParSibs.forEach(function (aParSib) {
-          if (aParSib.options.get('tag.anywhere.use') && !aParSib.options.get('editor.noAddButton')) {
+          if (aParSib.options.getOption('tag.anywhere.use') && !aParSib.options.getOption('editor.noAddButton')) {
             if (!((this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')) && aParSib.name === '#text')) {
               let cUsed = 0
               aAllSibs.forEach(function (aAllSib) {
@@ -374,23 +375,24 @@ const localFunctions = {
                   cUsed += 1
                 }
               }, this)
-              if (aParSib.options.get('tag.multiple.use') || cUsed === 0) {
+              if (aParSib.options.getOption('tag.multiple.use') || cUsed === 0) {
                 this.addableAfter.push({
                   'uId': aParSib.uId,
                   'type': 'anywhere',
-                  'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name,
+                  'title': aParSib.options.getOption('editor.addTitle') || aParSib.options.getOption('title.value') || aParSib.name,
                   'cShow': true,
                   'bShow': true,
-                  'cUsed': cUsed
+                  'cUsed': cUsed,
+                  'sort': aParSib.options.getOption('editor.addButtonSort') || 99999
                 })
               }
             }
           }
         }, this)
         let startPos = this
-        if (this.parserObj.options.get('tag.anywhere.use')) {		// Wenn dieses "EditorObj" ein "anywhere" ist das nächste vorherige "EditorObj" das nicht "anywhere" ist als Startpunkt zu benutzen.
+        if (this.parserObj.options.getOption('tag.anywhere.use')) {		// Wenn dieses "EditorObj" ein "anywhere" ist das nächste vorherige "EditorObj" das nicht "anywhere" ist als Startpunkt zu benutzen.
           this.getSiblings('prev', true).some(function (aPrevSib) {
-            if (!aPrevSib.parserObj || !aPrevSib.parserObj.options.get('tag.anywhere.use')) {
+            if (!aPrevSib.parserObj || !aPrevSib.parserObj.options.getOption('tag.anywhere.use')) {
               startPos = aPrevSib
               return true
             }
@@ -400,7 +402,7 @@ const localFunctions = {
         let mHit = false
         let aNextSibsSP = startPos.getSiblings('next', true)
         aParNextSibs.forEach(function (aParSib) {
-          if (!aParSib.options.get('tag.anywhere.use') && !aParSib.options.get('editor.noAddButton')) {
+          if (!aParSib.options.getOption('tag.anywhere.use') && !aParSib.options.getOption('editor.noAddButton')) {
             let addThis = true
             if (mHit) {
               addThis = false
@@ -421,9 +423,10 @@ const localFunctions = {
               this.addableAfter.push({
                 'uId': aParSib.uId,
                 'type': 'ect',
-                'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name,
+                'title': aParSib.options.getOption('editor.addTitle') || aParSib.options.getOption('title.value') || aParSib.name,
                 'cShow': true,
-                'bShow': true
+                'bShow': true,
+                'sort': aParSib.options.getOption('editor.addButtonSort') || 99999
               })
             }
           }
@@ -438,11 +441,11 @@ const localFunctions = {
       let mHit = false
       this.parserObj.childs.forEach(function (acParser) {
         let addThis = true
-        if (acParser.options.get('editor.noAddButton')
-          || (this.parserObj && this.parserObj.options && this.parserObj.options.get('editor.fxFunction'))) {
+        if (acParser.options.getOption('editor.noAddButton')
+          || (this.parserObj && this.parserObj.options && this.parserObj.options.getOption('editor.fxFunction'))) {
           addThis = false
         }
-        if (!acParser.options.get('tag.anywhere.use')) {
+        if (!acParser.options.getOption('tag.anywhere.use')) {
           if (mHit) {
             addThis = false
           } else {
@@ -455,7 +458,7 @@ const localFunctions = {
           }
         } else {
           if ((acParser.name === '#text' && eChilds.length > 0 && (eChilds[0] && eChilds[0].parserObj && eChilds[0].parserObj.name === '#text'))
-            || (!acParser.options.get('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
+            || (!acParser.options.getOption('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
             addThis = false
           }
         }
@@ -466,14 +469,15 @@ const localFunctions = {
               cUsed += 1
             }
           }, this)
-          if (acParser.options.get('tag.multiple.use') || cUsed === 0) {
+          if (acParser.options.getOption('tag.multiple.use') || cUsed === 0) {
             this.addableInner.push({
               'uId': acParser.uId,
-              'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'),
-              'title': acParser.options.get('editor.addTitle') || acParser.options.get('title.value') || acParser.name,
+              'type': (acParser.options.getOption('tag.anywhere.use') ? 'anywhere' : 'ect'),
+              'title': acParser.options.getOption('editor.addTitle') || acParser.options.getOption('title.value') || acParser.name,
               'cShow': true,
               'bShow': true,
-              'cUsed': cUsed
+              'cUsed': cUsed,
+              'sort': acParser.options.getOption('editor.addButtonSort') || 99999
             })
           }
         }
@@ -497,7 +501,7 @@ const localFunctions = {
       // Spezielle Funktion
       let aFxCheck = []
       if (this.parserObj && this.parserObj.options) {
-        if (this.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect') {
+        if (this.parserObj.options.getOption('editor.fxFunction.name') === 'GeoSelect') {
           aFxCheck = FxGeoSelect.checkParser(this)
         }
       }
@@ -587,6 +591,8 @@ function pMatchSort (a, b) {		// Sortieren: "possible" nach oben, Fehler nach un
 }
 
 function AddableSort (a, b) {		// Sortieren:
+  if (a.sort < b.sort) { return -1 }
+  if (a.sort > b.sort) { return 1 }
   if (a.type !== 'self' && b.type === 'self') { return 1 }
   if (a.type === 'self' && b.type !== 'self') { return -1 }
   if (a.type !== 'ect' && b.type === 'ect') { return 1 }

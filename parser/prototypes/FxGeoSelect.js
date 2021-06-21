@@ -11,7 +11,7 @@ const localFunctions = {
       geoSelect[aField] = []
       geoSelect[aField + 'Obj'] = {}
     })
-    eObj.additionalFiles[lFile].JSON.forEach(function (aLine, aLineNr) {
+    eObj[lFile].JSON.forEach(function (aLine, aLineNr) {
       if (aLine.Sigle_DB) {
         let aStartPos = 1		// Spalte "Ort" ignorieren (Widerspricht der Logik von Kleinregion, Großregionen und Bundesländern)
         while (!aLine[pFields[aStartPos]] && aStartPos < pFields.length) {

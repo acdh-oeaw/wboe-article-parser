@@ -1,6 +1,7 @@
 import xmlFunctions from '../../XmlFunctions'
 import Parser from '../Parser'
 import FxGeoSelect from './FxGeoSelect'
+import stdFunctions from '@/functions/stdFunctions'
 
 const localFunctions = {
   init (xmlString, aFile) {
@@ -18,7 +19,7 @@ const localFunctions = {
     if (this.orgFilename) {
       this.orgPath = this.orgFilename.substr(0, this.orgFilename.length - this.orgFilename.split('\\').pop().split('/').pop().length)
     }
-    // "this.orgString" in DOM Objekt umwanden, überprüfen und in "this.orgDOM" setzen
+    // "this.orgString" in DOM Objekt umwandeln, überprüfen und in "this.orgDOM" setzen
     this.orgDOM = new DOMParser().parseFromString(this.orgString, 'application/xml')
     var xmlStringError = xmlFunctions.xmlDomCheck(this.orgDOM)		// Prüfen ob es Fehler gab
     if (xmlStringError.length > 0) {
@@ -32,6 +33,12 @@ const localFunctions = {
     if (this.orgDOM.childNodes.length > 0) {
       this.orgDOM.childNodes.forEach(function (topChild) {
         if (topChild.nodeType === topChild.ELEMENT_NODE && topChild.nodeName === 'objParser') {
+          if (topChild.attributes && topChild.attributes.type) {
+            this.type = topChild.attributes.type.value || 'unknown'
+          }
+          if (topChild.attributes && topChild.attributes.version) {
+            this.version = topChild.attributes.version.value || 'unknown'
+          }
           if (topChild.childNodes.length > 0) {
             topChild.childNodes.forEach(function (parserChild) {
               if (parserChild.nodeType === parserChild.ELEMENT_NODE) {
@@ -86,24 +93,25 @@ const localFunctions = {
     })
     // "additionalFiles" ermitteln und laden
     if (this.orgPath) {
+      var addFile = {}
       this.family.forEach(function (aObj) {
-        if (aObj && aObj.options && aObj.options.get('editor.fxFunction.filename')) {
-          let lFile = aObj.options.get('editor.fxFunction.filename')
+        if (aObj && aObj.options && aObj.options.getOption('editor.fxFunction.filename')) {
+          let lFile = aObj.options.getOption('editor.fxFunction.filename')
           // Datei laden falls noch nicht vorhanden.
-          if (!this.additionalFiles[lFile]) {
-            this.additionalFiles[lFile] = this.getAdditionalFile(lFile)
-            if (this.additionalFiles[lFile].error) {
-              this.addError(this.additionalFiles[lFile].error)
+          if (!addFile[lFile]) {
+            // this.additionalFiles[lFile] = this.getAdditionalFile(lFile)
+            addFile[lFile] = this.getAdditionalFile(lFile)
+            if (addFile[lFile].error) {
+              this.addError(addFile[lFile].error)
             }
           }
           // Datenvorbereitung für spezielle Funktionen:
-          if (!this.additionalFiles[lFile].geoSelect && this.additionalFiles[lFile].JSON && aObj.options.get('editor.fxFunction.name') === 'GeoSelect') {		// Daten für GeoSelect vorbereiten
-            this.additionalFiles[lFile].geoSelect = FxGeoSelect.fileData(this, lFile)
-            // console.log(this.additionalFiles[lFile].JSON.length, this.additionalFiles[lFile].geoSelect['Kleinregion'].length + this.additionalFiles[lFile].geoSelect['Großregion'].length + this.additionalFiles[lFile].geoSelect['Bundesland'].length, this.additionalFiles[lFile].JSON, this.additionalFiles[lFile].geoSelect)
+          if (!addFile[lFile].geoSelect && addFile[lFile].JSON && aObj.options.getOption('editor.fxFunction.name') === 'GeoSelect') {		// Daten für GeoSelect vorbereiten
+            addFile[lFile].geoSelect = FxGeoSelect.fileData(addFile, lFile)
           }
         }
       }, this)
-      // console.log(this.additionalFiles)
+      this.additionalFiles = stdFunctions.deepSeal(addFile)
     } else {
       this.addError('Das Verzeichniss des Parsers konnte nicht ermittelt werden!')
     }
@@ -121,6 +129,9 @@ const localFunctions = {
       return false
     }
     this.useable = true
+    this.updateFamilyErrors()
+    this.family = stdFunctions.deepSeal(this.family)
+    console.log('ParserBase', this)
     return true
   },
   prescan (aDom) {

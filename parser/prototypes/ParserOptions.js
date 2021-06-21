@@ -11,8 +11,11 @@ const localFunctions = {
     this.useable = true
     return true
   },
-  get (opt) {
-    return stdFunctions.getValOfSubProp(this.options, opt)
+  getOption (opt) {
+    if (!this.$optionsCache[opt]) {
+      this.$optionsCache[opt] = stdFunctions.getValOfSubProp(this.options, opt)
+    }
+    return this.$optionsCache[opt]
   },
   getOptionValue (parserOptionValue, aOrgXmObj) {
     let aVal = ((typeof parserOptionValue === 'object') ? JSON.parse(JSON.stringify(parserOptionValue)) : parserOptionValue)

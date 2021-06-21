@@ -75,7 +75,7 @@ const localFunctions = {
               if (cParserOptions) {
                 if (cParserOptions.getResult('title')) {
                   comment.title = cParserOptions.getResult('title')
-                } else if (cParserOptions.get('tagAsTitle') || this.layoutBase === 'panel') {
+                } else if (cParserOptions.getOption('tagAsTitle') || this.layoutBase === 'panel') {
                   comment.title = aObj.orgXmlObj.name
                 }
               }
