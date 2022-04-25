@@ -6,20 +6,30 @@ const localFunctions = {
     var out = false
     if ((typeof properties === 'string') && (properties !== null) && properties.length > 0) {
       var aObj = obj
-      properties.split('.').some(function (property) {
-        if ((typeof aObj === 'object') && (aObj !== null)) {
-          if (aObj.hasOwnProperty(property)) {
-            out = true
-            aObj = aObj[property]
+      if (properties.indexOf('.') !== -1) {
+        properties.split('.').some(function (property) {
+          if ((aObj !== null) && (typeof aObj === 'object')) {
+            if (aObj.hasOwnProperty(property)) {
+              out = true
+              aObj = aObj[property]
+            } else {
+              out = false
+              return true
+            }
           } else {
             out = false
             return true
           }
-        } else {
-          out = false
-          return true
+        })
+      } else {
+        let property = properties
+        if ((aObj !== null) && (typeof aObj === 'object')) {
+          if (aObj.hasOwnProperty(property)) {
+            out = true
+            aObj = aObj[property]
+          }
         }
-      })
+      }
     }
     return ((retVal) ? ((out) ? aObj : null) : out)
   },
@@ -49,12 +59,12 @@ const localFunctions = {
   getFirstObjectOfValueInPropertyOfArray (arr, property, value, returnObj) {
     let rObj = ((returnObj) ? {} : null)
     if (Array.isArray(arr)) {
-      arr.some(function (aVal, aKey) {
-        if (aVal[property] && aVal[property] === value) {
-          rObj = aVal
-          return true
+      for (var i = 0, iLen = arr.length; i < iLen; i++) {
+        if (arr[i][property] === value) {
+          rObj = arr[i]
+          break
         }
-      }, this)
+      }
     }
     return rObj
   },

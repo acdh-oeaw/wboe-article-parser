@@ -53,7 +53,7 @@ const localFunctions = {
       eObj.getChilds('all', true).forEach(function (child) {
         if (child.orgXmlObj.name === 'placeName') {
           placeCount += 1
-          if (!child.orgXmlObj.attributes['ref']) {
+          if (!child.orgXmlObj.attributes.ref) {
             if (!child.orgXmlObj.getValue(false)) {
               delList.push(child)
             } else {
@@ -67,14 +67,14 @@ const localFunctions = {
             }
           } else {
             // "p" vor id hinzufügen falls nicht vorhanden
-            if (child.orgXmlObj.attributes['ref'][0] !== 'p' && child.orgXmlObj.attributes['ref'][0] !== '/') {
-              child.orgXmlObj.setAttribute('ref', 'p' + child.orgXmlObj.attributes['ref'])
+            if (child.orgXmlObj.attributes.ref[0] !== 'p' && child.orgXmlObj.attributes.ref[0] !== '/') {
+              child.orgXmlObj.setAttribute('ref', 'p' + child.orgXmlObj.attributes.ref)
             }
             // "/geodata-wboe.xml#" falls nicht vorhanden
-            if (child.orgXmlObj.attributes['ref'][0] !== '/') {
-              child.orgXmlObj.setAttribute('ref', '/geodata-wboe.xml#' + child.orgXmlObj.attributes['ref'])
+            if (child.orgXmlObj.attributes.ref[0] !== '/') {
+              child.orgXmlObj.setAttribute('ref', '/geodata-wboe.xml#' + child.orgXmlObj.attributes.ref)
             }
-            let sVal = stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.places[eObj.fxData.places.pFields[eObj.fxData.places.xFields.indexOf(child.orgXmlObj.attributes.type)]], 'sigle', child.orgXmlObj.attributes['ref'])
+            let sVal = stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.places[eObj.fxData.places.pFields[eObj.fxData.places.xFields.indexOf(child.orgXmlObj.attributes.type)]], 'sigle', child.orgXmlObj.attributes.ref)
             if (sVal && child.orgXmlObj.getValue(false) !== sVal.name) {
               child.orgXmlObj.setValue(sVal.name)
             }
@@ -102,23 +102,24 @@ const localFunctions = {
     }
     eObj.getChilds('all', true).forEach(function (child) {
       if (child.orgXmlObj.name === 'placeName') {
-        if (!child.orgXmlObj.attributes['ref'] && child.orgXmlObj.getValue(false)) {
+        if (!child.orgXmlObj.attributes.ref && child.orgXmlObj.getValue(false)) {
           warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') ohne "ref" Attribut!')
-        } else if (child.orgXmlObj.attributes['ref']) {
-          let foundInPlaces = 0
-          eObj.fxData.places.pFields.forEach(function (val) {
-            if (stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.places[val], 'sigle', child.orgXmlObj.attributes['ref'])) {
-              foundInPlaces += 1
+        } else if (child.orgXmlObj.attributes.ref) {
+          let foundInPlaces = false
+          eObj.fxData.places.pFields.some(function (val) {
+            if (stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.places[val], 'sigle', child.orgXmlObj.attributes.ref)) {
+              foundInPlaces = true
+              return true
             }
           }, this)
-          if (foundInPlaces < 1) {
-            warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') hat unbekanntes "ref" (' + child.orgXmlObj.attributes['ref'] + ') Attribut!')
+          if (!foundInPlaces) {
+            warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') hat unbekanntes "ref" (' + child.orgXmlObj.attributes.ref + ') Attribut!')
           }
         }
         if (child.orgXmlObj.attributes.type) {
           let aFieldOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.fields, 'name', eObj.fxData.places.pFields[eObj.fxData.places.xFields.indexOf(child.orgXmlObj.attributes.type)])
           if (!aFieldOption) {
-            warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ((child.orgXmlObj.attributes['ref']) ? ', ' + child.orgXmlObj.attributes['ref'] : '') + ') Attribut "' + child.orgXmlObj.attributes.type + '" ist im parser nicht vorgesehen!')
+            warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ((child.orgXmlObj.attributes.ref) ? ', ' + child.orgXmlObj.attributes.ref : '') + ') Attribut "' + child.orgXmlObj.attributes.type + '" ist im parser nicht vorgesehen!')
           }
         }
       }

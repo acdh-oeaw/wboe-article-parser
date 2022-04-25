@@ -14,8 +14,18 @@ const localFunctions = {
   getOption (opt) {
     if (!this.$optionsCache[opt]) {
       this.$optionsCache[opt] = stdFunctions.getValOfSubProp(this.options, opt)
+      this.$optionsCache[opt] = stdFunctions.deepSeal(this.$optionsCache[opt])
     }
     return this.$optionsCache[opt]
+  },
+  getPreviewFontStyles () {
+    if (!this.previewFontStyles) {
+      this.previewFontStyles = (stdFunctions.getValOfSubProp(this.options, 'previewLayout.bold') ? ' bold' : '')
+      + (stdFunctions.getValOfSubProp(this.options, 'previewLayout.italic') ? ' italic' : '')
+      + (stdFunctions.getValOfSubProp(this.options, 'previewLayout.underline') ? ' underline' : '')
+      + (stdFunctions.getValOfSubProp(this.options, 'previewLayout.ls1pt') ? ' ls1pt' : '')
+    }
+    return this.previewFontStyles
   },
   getOptionValue (parserOptionValue, aOrgXmObj) {
     let aVal = ((typeof parserOptionValue === 'object') ? JSON.parse(JSON.stringify(parserOptionValue)) : parserOptionValue)

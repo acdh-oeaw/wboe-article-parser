@@ -7,11 +7,15 @@ const localFunctions = {
       this.addError('Es wurde kein "parserObject" übergeben!')
       return false
     }
+    let t1 = performance.now()
     this.contentObj = new Editor.EditorObject(this, null, this.parserObj, this.orgXmlObj, true)
+    console.log('new EditorObject', performance.now() - t1, 'ms')
     if (!this.contentObj) {
       this.addError('Kein "contentObj" vorhanden!')
     }
+    let t2 = performance.now()
     this.contentObj.updateData(true, true)
+    console.log('updateData', performance.now() - t2, 'ms')
     this.ready = true
     if (Object.keys(this.errors).length > 0) {
       return false

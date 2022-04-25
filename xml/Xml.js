@@ -54,6 +54,7 @@ localFunctions.XmlBase.prototype.moveTo = prototypeXmlBase.moveTo
 localFunctions.XmlObject.prototype.addError = prototypeMultiple.addError
 localFunctions.XmlObject.prototype.init = prototypeXmlObject.init
 localFunctions.XmlObject.prototype.getValue = prototypeXmlObject.getValue
+localFunctions.XmlObject.prototype.getRawValue = prototypeXmlObject.getRawValue
 localFunctions.XmlObject.prototype.setValue = prototypeXmlObject.setValue
 localFunctions.XmlObject.prototype.setAttribute = prototypeXmlObject.setAttribute
 localFunctions.XmlObject.prototype.getXML = prototypeXmlObject.getXML

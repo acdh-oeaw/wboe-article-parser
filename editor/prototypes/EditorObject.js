@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import stdFunctions from '../../stdFunctions'
 import Editor from '../Editor'
 import FxGeoSelect from './FxGeoSelect'
 import FxRefBiblSelect from './FxRefBiblSelect'
@@ -25,7 +24,7 @@ const localFunctions = {
             return true
           }
         }, this)
-        // Aktuell Auswahl neu setzen
+        // Aktuelle Auswahl neu setzen
         if (oKey >= 0) {
           let aVal = this.parserObj.options.getOption('value.is.possibleValues')[oKey]
           this.orgXmlObj.setValue(aVal.value || aVal)
@@ -69,11 +68,11 @@ const localFunctions = {
         }, this)
       }
     }
-    let aParserChilds = stdFunctions.getValOfSubProp(this.parserObj, 'childs') || []
-    let aXmlChilds = stdFunctions.getValOfSubProp(this.orgXmlObj, 'childs') || []
+    let aParserChilds = this.parserObj ? this.parserObj.childs || [] : []
+    let aXmlChilds = this.orgXmlObj ? this.orgXmlObj.childs || [] : []
     if (this.isRoot) {
-      aParserChilds = stdFunctions.getValOfSubProp(this.parserObj, 'content') || []
-      aXmlChilds = stdFunctions.getValOfSubProp(this.orgXmlObj, 'content') || []
+      aParserChilds = this.parserObj ? this.parserObj.content || [] : []
+      aXmlChilds = this.orgXmlObj ? this.orgXmlObj.content || [] : []
     }
     // Parser mit XML Objekt vergleichen
     if (!this.ignoreChilds) {
@@ -368,14 +367,14 @@ const localFunctions = {
         let aAllSibs = this.getSiblings('all', true)
         aParSibs.forEach(function (aParSib) {
           if (aParSib.options.getOption('tag.anywhere.use') && !aParSib.options.getOption('editor.noAddButton')) {
-            if (!((this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')) && aParSib.name === '#text')) {
+            if (!(aParSib.name === '#text' && (this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')))) {
               let cUsed = 0
               aAllSibs.forEach(function (aAllSib) {
                 if (aAllSib.parserObj && aAllSib.parserObj.uId === aParSib.uId) {
                   cUsed += 1
                 }
               }, this)
-              if (aParSib.options.getOption('tag.multiple.use') || cUsed === 0) {
+              if (cUsed === 0 || aParSib.options.getOption('tag.multiple.use')) {
                 this.addableAfter.push({
                   'uId': aParSib.uId,
                   'type': 'anywhere',
@@ -458,7 +457,7 @@ const localFunctions = {
           }
         } else {
           if ((acParser.name === '#text' && eChilds.length > 0 && (eChilds[0] && eChilds[0].parserObj && eChilds[0].parserObj.name === '#text'))
-            || (!acParser.options.getOption('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
+            || (eChilds.length > 0 && eChilds[0].parserObj === acParser && !acParser.options.getOption('tag.multiple.use'))) {
             addThis = false
           }
         }

@@ -61,6 +61,7 @@ const localFunctions = {
     this.warnings = []						// Liste der Warnungen
     this.options = {}							// Aktuelle Optionen
     this.$optionsCache = {}				// Cache für getOption
+    this.previewFontStyles = ''		// Cache für Styles (Bold, Italic usw.)
     this.init()										// Immer dirket initialisieren
     // this.initFromParserObject(ParserObject)	// Startwerte von "ParserObject" ermitteln
     // this.extendJSON(jsonString, errObj)		// Optionen erweitern durch JSON String
@@ -114,6 +115,7 @@ localFunctions.ParserOptions.prototype.getOption = prototypeParserOptions.getOpt
 localFunctions.ParserOptions.prototype.getResult = prototypeParserOptions.getResult
 localFunctions.ParserOptions.prototype.extendPreviewLayout = prototypeParserOptions.extendPreviewLayout
 localFunctions.ParserOptions.prototype.getOptionValue = prototypeParserOptions.getOptionValue
+localFunctions.ParserOptions.prototype.getPreviewFontStyles = prototypeParserOptions.getPreviewFontStyles
 
 // ParserOptions Prototypen
 localFunctions.ParserPreviewObject.prototype.addError = prototypeMultiple.addError

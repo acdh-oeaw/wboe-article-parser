@@ -15,7 +15,7 @@ const localFunctions = {
     this.orgString = xmlString.trim()
     // "this.orgString" in DOM Objekt umwandeln, überprüfen und in "this.orgDOM" setzen
     this.orgDOM = new DOMParser().parseFromString(this.orgString, 'application/xml')
-    var xmlStringError = xmlFunctions.xmlDomCheck(this.orgDOM)		// Prüfen ob es Fehler gab
+    var xmlStringError = xmlFunctions.xmlDomCheck(this.orgDOM)		// Prüfen ob es Fehler gab (unter 20 ms)
     if (xmlStringError.length > 0) {
       this.orgDOM = null
       this.addError({'txt': 'Beim verarbeiten der XML ist es zu einen Fehler gekommen!', 'sErr': xmlStringError})

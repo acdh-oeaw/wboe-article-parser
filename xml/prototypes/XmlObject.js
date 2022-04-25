@@ -4,6 +4,7 @@ import stdFunctions from '../../stdFunctions'
 
 const localFunctions = {
   init () {
+    // let t1 = performance.now()
     // Aktuelles DOM Objekt auswerten
     if (!(typeof this.uId === 'number') || this.root.family.indexOf[this.uId] === -1) {		// Die "uId" zuweisen falls noch nicht vorhanden
       this.uId = this.root.family.push(this) - 1
@@ -62,6 +63,12 @@ const localFunctions = {
       }
     }
     this.orgDOM = stdFunctions.deepSeal(this.orgDOM)
+    // if (this.orgDOM && (!this.orgDOM.childNodes || this.orgDOM.childNodes.length === 0)) {
+    //   let t = performance.now() - t1
+    //   if (t > 0.01) {
+    //     console.log('XmlObject', this.name, t, 'ms')
+    //   }
+    // }
     return true
   },
   addByParser (pos, pObj, autoCreate) {
@@ -182,6 +189,9 @@ const localFunctions = {
     } else {
       return aValue.toString()
     }
+  },
+  getRawValue () {
+    return this.value
   },
   setValue (val) {
     // ToDo: innerXML ?!?!
